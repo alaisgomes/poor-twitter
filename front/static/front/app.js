@@ -1,3 +1,4 @@
+
 new Vue({ 
     el: '#app',
     data() {
@@ -6,14 +7,13 @@ new Vue({
             tweet: {
                 name: '',
                 text: '',
-                creation_date: '',
             },
             submitted: false,
             tweets: null,
         }
     },
     mounted() {
-        _this = this;
+        var _this = this;
         $.ajax({
             url: this.api_url,
             method: 'GET',
@@ -25,6 +25,7 @@ new Vue({
     methods: {
         addTweet() {
             var _this = this;
+
             $.ajax({
                 url: this.api_url,
                 method: 'POST',
