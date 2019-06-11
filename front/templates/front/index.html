@@ -4,7 +4,6 @@
 <head>
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   
   <title>Poor Man's Twitter</title>
@@ -40,33 +39,40 @@
     </nav>
     
     <div class="container">   
+      <div v-if="!validTweet" class="alert alert-danger" role="alert">
+        Please, fill out all fields to proceed.
+      </div>
       <div class="row">   
         <form>
           <div class="form-row">
             <div class="form-group col-xs-12 col-md-3">
-              <label for="tweetInput">Name</label>
-              <textarea 
-                maxlength="50" 
-                class="form-control" 
-                id="TweetName" 
-                v-model="tweet.name"
-                required></textarea>
+                <label for="tweetName">Name</label>
+                <textarea 
+                  maxlength="50" 
+                  name="TweetName" 
+                  v-model="tweet.name"
+                  class="form-control"
+                  required></textarea>
             </div>
             
             <div class="form-group col-xs-12 col-md-6">
               <label for="tweetInput">Tweet</label>
               <textarea 
                 maxlength="50" 
-                class="form-control" 
-                id="tweetInput" 
-                v-model="tweet.text"></textarea>
+                class="form-control"
+                name="tweetInput" 
+                v-model="tweet.text"
+                required></textarea>
             </div>
           </div>
         
           <br>
           
           <div class="form-row col-xs-12 col-md-6">
-            <button class="btn btn-primary" @click.prevent="addTweet">Add Tweet</button>
+            <button 
+              type="submit"
+              class="btn btn-primary" 
+              @click.prevent="addTweet">Add Tweet</button>
           </div>
         </form>
       
@@ -114,6 +120,7 @@
   </div>
 
   {% load static %}
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src='{% static "front/vue.js" %}'></script>
   <script src='{% static "front/app.js" %}'></script>
 

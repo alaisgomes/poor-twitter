@@ -11,8 +11,8 @@ new Vue({
             tweets: [],
 
             currentKey: 'creation_date',
-            currentDirection: 'asc',
-
+            currentDirection: 'desc',
+            validTweet: true,
         }
     },
     created() {
@@ -26,6 +26,9 @@ new Vue({
         });
     },
     methods: {
+        validate() {
+            return this.tweet.name && this.tweet.text
+        },
         sortTweetsBy(key) {
             if(key === this.currentKey) {
               this.currentDirection = this.currentDirection === 'asc' ? 'desc' : 'asc';
@@ -33,21 +36,24 @@ new Vue({
             this.currentKey = key;
         },
         addTweet() {
-            $.ajax({
-                url: this.apiUrl,
-                method: 'POST',
-                data: _this.tweet,
-                success: function (response) {
-                    _this.tweets.unshift(response);
-                }
-            });
+            this.validTweet = this.validate()
+            if (this.validTweet) {
+                var _this = this;
+                $.ajax({
+                    url: this.apiUrl,
+                    method: 'POST',
+                    data: _this.tweet,
+                    success: function (response) {
+                        _this.tweets.unshift(response);
+                    }
+                });
+            }
         } 
     },
     computed: {
         sortTweets() {
             return this.tweets.sort((a,b) => {
               let modifier = 1;
-              console.log(a, b);
               if(this.currentDirection === 'desc') modifier = -1;
               if(a[this.currentKey] < b[this.currentKey]) return -1 * modifier;
               if(a[this.currentKey] > b[this.currentKey]) return 1 * modifier;
