@@ -4,72 +4,118 @@
 <head>
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  
   <title>Poor Man's Twitter</title>
+  
   <style>
+    html, #app {
+      background-color: #e6ecf0;
+      font-family: Roboto;
+    }
+
     .container {
-      margin-top: 3%;
+      margin-top: 2%;
+      background-color: white;
+      border-radius: 3pt;
+      padding: 2em;
+    }
+
+    .navbar  {
+      padding: 0.5em;
+    }
+
+    .table .sorting::after {
+      margin-left: .25rem;
+      content: url('data:image/svg+xml;utf8,<svg width=\'6\' height=\'10\' viewBox=\'0 0 6 10\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'><path fill-rule=\'evenodd\' clip-rule=\'evenodd\' d=\'M3 0L6 4H0L3 0ZM3 10L0 6H6L3 10Z\' fill=\'%238898aa\'/></svg>');
     }
   </style>
 </head>
 
 <body>
   <div id="app">
-    <div class="container">
-      
-      <div class="row">
-        <form class="form-inline col-md-offset-3">
-          <div class="row">
-            <div class="form-group col-md-3">
+    <nav class="navbar navbar-dark bg-primary">
+      <h4>Poor Man's Twitter</h4>
+    </nav>
+    
+    <div class="container">   
+      <div class="row">   
+        <form>
+          <div class="form-row">
+            <div class="form-group col-xs-12 col-md-3">
               <label for="tweetInput">Name</label>
-              <textarea maxlength="50" class="form-control" id="TweetName" v-model="tweet.name"></textarea>
+              <textarea 
+                maxlength="50" 
+                class="form-control" 
+                id="TweetName" 
+                v-model="tweet.name"
+                required></textarea>
             </div>
-          <div class="form-group col-md-3">
-            <label for="tweetInput">Tweet</label>
-            <textarea maxlength="50" class="form-control" id="tweetInput" v-model="tweet.text"></textarea>
+            
+            <div class="form-group col-xs-12 col-md-6">
+              <label for="tweetInput">Tweet</label>
+              <textarea 
+                maxlength="50" 
+                class="form-control" 
+                id="tweetInput" 
+                v-model="tweet.text"></textarea>
+            </div>
           </div>
-        </div>
-        <br>
-          <div class="col-sm-8 col-sm-offset-2 col-xs-12 col-md-6 col-md-offset-4 form-group">
+        
+          <br>
+          
+          <div class="form-row col-xs-12 col-md-6">
             <button class="btn btn-primary" @click.prevent="addTweet">Add Tweet</button>
           </div>
         </form>
+      
       </div>
       
       <hr>
 
       <div class=row>
-        <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col" data-sortable="true">Time</th>
-                  <th scope="col" data-sortable="true">Name</th>
-                  <th scope="col">Tweet</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(tweet, idx) in tweets">
-                  <td>{% verbatim %}
-                      {{ tweet.creation_date }}
-                      {% endverbatim %}</td>
-                  <td>{% verbatim %}
-                      {{ tweet.name }}
-                      {% endverbatim %}</td>
-                  <td>{% verbatim %}
-                      {{ tweet.text }}
-                      {% endverbatim %}</td>
-                </tr>
-              </tbody>
-            </table>
-      </div>
+          <table class="table">
+            <thead  class="thead-dark">
+              <tr>
+                <th 
+                  class="sorting"
+                  @click="sortTweetsBy('creation_date')"               
+                 >
+                  Time</th>
+                <th 
+                  class="sorting"
+                  @click="sortTweetsBy('name')" 
+                  >Name</th>
+                <th scope="col">Tweet</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="tweet in sortTweets">
+                <td>
+                    {% verbatim %}
+                    {{ tweet.creation_date }}
+                    {% endverbatim %}
+                </td>
+                <td>
+                    {% verbatim %}
+                    {{ tweet.name }}
+                    {% endverbatim %}
+                </td>
+                <td>{% verbatim %}
+                    {{ tweet.text }}
+                    {% endverbatim %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
     </div>
   </div>
 
   {% load static %}
-  <script src="{% static "front/vue.js" %}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="{% static "front/app.js" %}"></script>
+  <script src='{% static "front/vue.js" %}'></script>
+  <script src='{% static "front/app.js" %}'></script>
 
 </body>
 
